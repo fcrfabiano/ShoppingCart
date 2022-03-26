@@ -182,9 +182,18 @@
     }
   }
   
-  .item__price {
+  .item__price, .total-price, .subtotal {
     color: #444343;
     font-weight: 700;
-    font-size: 1.1rem;
+    font-size: 1.3rem;
     margin: 10px;
+  }
+
+  .item__price span {
+    font-weight: 400;
+    font-size: 0.9rem;
+  }
+
+  .subtotal {
+    font-weight: 400;
   }

@@ -20,23 +20,27 @@ function toReal(total) {
   return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(total);
 }
 
+function toRealString(total) {
+  return parseFloat(total.toFixed(2)).toLocaleString('pt-BR', {
+    currency: 'BRL',
+    minimumFractionDigits: 2
+  });
+}
+
 function totalCart() {
-  const total = cart.reduce((acc, curr) => {
+  return cart.reduce((acc, curr) => {
     let accumulator = acc;
     accumulator += curr.salePrice;
 
     return accumulator;
   }, 0);
-
-  return toReal(total);
 }
-
 function cartItemClickListener(event) {
   const sku = event.target.innerText.split(' ')[1];
   event.target.remove();
   cart = cart.filter((item) => item.sku !== sku);
   saveCartItems(JSON.stringify(cart));
-  totalPrice.innerText = totalCart();
+  totalPrice.innerHTML= toReal(totalCart());
 }
 
 function createProductImageElement(imageSource) {
@@ -71,7 +75,7 @@ async function adicionaProdutoCarrinho(event) {
     );
     cart.push({ sku, name, salePrice });
     saveCartItems(JSON.stringify(cart));
-    totalPrice.innerText = totalCart();
+    totalPrice.innerHTML= toReal(totalCart());
     cartItems.appendChild(createCartItemElement({ sku, name, salePrice }));
 }
 
@@ -82,7 +86,9 @@ function createProductItemElement({ sku, name, image, price }) {
   section.appendChild(createCustomElement('span', 'item__sku', sku));
   section.appendChild(createProductImageElement(image));
   section.appendChild(createCustomElement('span', 'item__title', name));
-  section.appendChild(createCustomElement('span', 'item__price', toReal(price)));
+  const preco = createCustomElement('span', 'item__price');
+  preco.innerHTML = `<span>R$ </span><strong>${toRealString(price)}</strong>`;
+  section.appendChild(preco);
   const btnAddItem = createCustomElement('button', 'item__add', 'Adicionar ao carrinho!');
   section.appendChild(btnAddItem);
 
@@ -111,7 +117,7 @@ function limpaCarrinho() {
   cart = [];
   cartItems.innerHTML = '';
   saveCartItems(JSON.stringify(cart));
-  totalPrice.innerText = totalCart();
+  totalPrice.innerHTML= toReal(totalCart());
 }
 
 function carregaItensDoStorage() {
@@ -121,7 +127,7 @@ function carregaItensDoStorage() {
       const li = createCartItemElement(item);
       cart = storage;
       cartItems.appendChild(li);
-      totalPrice.innerText = totalCart();
+      totalPrice.innerHTML= toReal(totalCart());
     });
   }
 }
@@ -130,5 +136,5 @@ window.onload = () => {
   carregarItens('computador');
   carregaItensDoStorage();
   document.querySelector('.empty-cart').addEventListener('click', limpaCarrinho);
-  totalPrice.innerText = totalCart();
+  totalPrice.innerHTML= toReal(totalCart());
 };
