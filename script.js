@@ -7,11 +7,17 @@ function criaCarregando() {
   const loading = document.createElement('h1');
   loading.className = 'loading';
   items.appendChild(loading);
+  document.querySelector('.empty-cart').style.cursor = 'not-allowed';
 }
 
 function removeCarregando() {
   const loading = document.querySelector('.loading');
   loading.remove();
+  document.querySelector('.empty-cart').style.cursor = 'pointer';
+}
+
+function toReal(total) {
+  return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(total);
 }
 
 function totalCart() {
@@ -22,7 +28,7 @@ function totalCart() {
     return accumulator;
   }, 0);
 
-  return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(total);
+  return toReal(total);
 }
 
 function cartItemClickListener(event) {
@@ -69,13 +75,14 @@ async function adicionaProdutoCarrinho(event) {
     cartItems.appendChild(createCartItemElement({ sku, name, salePrice }));
 }
 
-function createProductItemElement({ sku, name, image }) {
+function createProductItemElement({ sku, name, image, price }) {
   const section = document.createElement('section');
   section.className = 'item';
 
   section.appendChild(createCustomElement('span', 'item__sku', sku));
-  section.appendChild(createCustomElement('span', 'item__title', name));
   section.appendChild(createProductImageElement(image));
+  section.appendChild(createCustomElement('span', 'item__title', name));
+  section.appendChild(createCustomElement('span', 'item__price', toReal(price)));
   const btnAddItem = createCustomElement('button', 'item__add', 'Adicionar ao carrinho!');
   section.appendChild(btnAddItem);
 
@@ -86,14 +93,18 @@ function createProductItemElement({ sku, name, image }) {
 
 async function carregarItens(filter) {
   criaCarregando();
-  const products = await fetchProducts(filter);
-  products.results.forEach((product) => {
-    const item = createProductItemElement(
-      { sku: product.id, name: product.title, image: product.thumbnail },
-      );
-    items.appendChild(item);
-  });
-  removeCarregando();
+  try {
+    const products = await fetchProducts(filter);
+    products.results.forEach((product) => {
+      const item = createProductItemElement(
+        { sku: product.id, name: product.title, image: product.thumbnail, price: product.price },
+        );
+      items.appendChild(item);
+    });
+    removeCarregando();
+  } catch (error) {
+    console.log(error.message);
+  }
 }
 
 function limpaCarrinho() {

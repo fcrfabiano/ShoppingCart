@@ -111,7 +111,7 @@
     align-items: center;
     flex-grow: 1;
     padding: 10px;
-    text-align: center;
+    text-align: center; 
   }
   
   .item .item__image {
@@ -125,6 +125,11 @@
     margin: 0;
     padding: 10px;
     color: white;
+  }
+
+  .item .item__add:active {
+    filter: brightness(1.2);
+    transition: filter 0.2s;
   }
   
   .cart {
@@ -146,6 +151,12 @@
     margin: 0 auto;
     border: 2px solid rgb(5, 52, 219);
     background-color: rgb(249, 249, 246);
+    cursor: pointer;
+  }
+
+  .empty-cart:active {
+    filter: brightness(0.9);
+    transition: filter 0.2s;
   }
   
   .price-container {
@@ -171,3 +182,9 @@
     }
   }
   
+  .item__price {
+    color: #444343;
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin: 10px;
+  }
