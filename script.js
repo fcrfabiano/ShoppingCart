@@ -15,12 +15,14 @@ function removeCarregando() {
 }
 
 function totalCart() {
-  return cart.reduce((acc, curr) => {
+  const total = cart.reduce((acc, curr) => {
     let accumulator = acc;
     accumulator += curr.salePrice;
 
     return accumulator;
   }, 0);
+
+  return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(total);
 }
 
 function cartItemClickListener(event) {
