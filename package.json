@@ -1,0 +1,35 @@
+{
+  "name": "ShoppingCart",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:fcrfabiano/ShoppingCart.git",
+  "author": "Fabiano César <fcfabiano.cesar@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "test": "jest",
+    "test:coverage": "jest --coverage",
+    "lint": "eslint --no-inline-config --no-error-on-unmatched-pattern -c .eslintrc.json . --ext .js",
+    "lint:styles": "stylelint *.css --config .stylelintrc.json --ignore-disables --allow-empty-input"
+  },
+  "jest": {
+    "coverageReporters": [
+      "text",
+      "html"
+    ],
+    "collectCoverageFrom": [
+      "**/helpers/**"
+    ],
+    "testMatch": [
+      "**/tests/**/*.test.js?(x)"
+    ]
+  },
+  "dependencies": {
+    "jest": "^27.5.1",
+    "mocha": "^9.2.2",
+    "mochawesome": "^7.1.3",
+    "mochawesome-merge": "^4.2.1",
+    "mochawesome-report-generator": "^6.2.0",
+    "stylelint": "^14.6.1",
+    "stylelint-config-standard": "^25.0.0"
+  }
+}
