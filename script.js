@@ -36,9 +36,9 @@ function totalCart() {
   }, 0);
 }
 function cartItemClickListener(event) {
-  const sku = event.target.parentElement.firstChild.innerText;
+  const id = event.target.parentElement.firstChild.innerText;
   event.target.parentElement.remove();
-  cart = cart.filter((item) => item.sku !== sku);
+  cart = cart.filter((item) => item.id !== id);
   saveCartItems(JSON.stringify(cart));
   totalPrice.innerHTML= toReal(totalCart());
 }
@@ -68,11 +68,11 @@ function criaElemento(elemento = 'div', className = '', texto = '') {
   return newElemento;
 }
 
-function createCartItemElement({ sku, name, salePrice, image }) {
+function createCartItemElement({ id, name, salePrice, image }) {
   const li = document.createElement('li');
   li.className = 'cart__item__flex';
-  const id = criaElemento('div', '', sku);
-  id.style.display = 'none';
+  const sku = criaElemento('div', '', id);
+  sku.style.display = 'none';
   const img = createProductImageElement(image);
   img.className = 'cart__item__img';
   const descContainer = criaElemento('div', 'cart__item__description__container');
@@ -80,32 +80,25 @@ function createCartItemElement({ sku, name, salePrice, image }) {
   const prodPrice = criaElemento('span', 'cart__item__price', toReal(salePrice));
   const close = createProductImageElement('./assets/xmark-solid.svg');
   close.className = 'cart__item__close';
-  li.appendChild(id);
+  li.appendChild(sku);
   li.appendChild(img);
   descContainer.appendChild(prodName);
   descContainer.appendChild(prodPrice);
   li.appendChild(descContainer);
   li.appendChild(close);
   close.addEventListener('click', cartItemClickListener);
-  //<i class="fa-solid fa-xmark"></i>
 
   return li;
 }
-// li.innerHTML`<img src="${image}" class="cart__item__img">
-// <div class="cart__item__description__container">
-//   <span>${name}</span>
-//   <span class="cart__item__price">${}</span>
-// </div>
-// <a class="cart__item__close">X</a>`;
-
 async function adicionaProdutoCarrinho(event) {
   const { id: sku, title: name, price: salePrice, thumbnail: image } = await fetchItem(
     getSkuFromProductItem(event.target.parentElement),
     );
-    cart.push({ sku, name, salePrice, image });
+    const id = uuidv4();
+    cart.push({ id, sku, name, salePrice, image });
     saveCartItems(JSON.stringify(cart));
     totalPrice.innerHTML= toReal(totalCart());
-    cartItems.appendChild(createCartItemElement({ sku, name, salePrice, image }));
+    cartItems.appendChild(createCartItemElement({ id, name, salePrice, image }));
 }
 
 function createProductItemElement({ sku, name, image, price }) {
