@@ -216,7 +216,8 @@
   .cart__item__description__container {
     display: flex;
     flex-direction: column;
-    max-width: 500px;
+    /* max-width: 350px;
+    min-width: 150px; */
   }
 
   .cart__item__price {
@@ -232,6 +233,4 @@
     margin-right: 20px;
     width: 1.5rem;
     height: 1.5rem;
-    background-image: url('assets/xmark-solid.svg');
-    background-repeat: no-repeat;
   }

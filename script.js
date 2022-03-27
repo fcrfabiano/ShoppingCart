@@ -78,7 +78,8 @@ function createCartItemElement({ sku, name, salePrice, image }) {
   const descContainer = criaElemento('div', 'cart__item__description__container');
   const prodName = criaElemento('span', '', name);
   const prodPrice = criaElemento('span', 'cart__item__price', toReal(salePrice));
-  const close = criaElemento('a', 'cart__item__close', '');
+  const close = createProductImageElement('./assets/xmark-solid.svg');
+  close.className = 'cart__item__close';
   li.appendChild(id);
   li.appendChild(img);
   descContainer.appendChild(prodName);
