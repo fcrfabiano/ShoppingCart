@@ -143,6 +143,7 @@
   .cart .cart__items {
     height: 500px;
     overflow-y: scroll;
+    margin: 10px;
   }
   
   .empty-cart {
@@ -196,4 +197,41 @@
 
   .subtotal {
     font-weight: 400;
+  }
+
+  .cart__item__flex {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin: 20px 0;
+  }
+
+  .cart__item__img {
+    border-radius: 50%;
+    height: 50px;
+    width: 50px;
+    margin: 10px;
+  }
+
+  .cart__item__description__container {
+    display: flex;
+    flex-direction: column;
+    max-width: 500px;
+  }
+
+  .cart__item__price {
+    font-size: 0.9rem;
+    color: rgb(139,38,69);
+    margin-top: 15px;
+  }
+
+  .cart__item__close {
+    cursor: pointer;
+    align-self: flex-start;
+    margin-left: 40px;
+    margin-right: 20px;
+    width: 1.5rem;
+    height: 1.5rem;
+    background-image: url('assets/xmark-solid.svg');
+    background-repeat: no-repeat;
   }

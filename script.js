@@ -36,8 +36,8 @@ function totalCart() {
   }, 0);
 }
 function cartItemClickListener(event) {
-  const sku = event.target.innerText.split(' ')[1];
-  event.target.remove();
+  const sku = event.target.parentElement.firstChild.innerText;
+  event.target.parentElement.remove();
   cart = cart.filter((item) => item.sku !== sku);
   saveCartItems(JSON.stringify(cart));
   totalPrice.innerHTML= toReal(totalCart());
@@ -61,22 +61,50 @@ function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 
-function createCartItemElement({ sku, name, salePrice }) {
-  const li = document.createElement('li');
-  li.className = 'cart__item';
-  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-  li.addEventListener('click', cartItemClickListener);
-  return li;
+function criaElemento(elemento = 'div', className = '', texto = '') {
+  const newElemento = document.createElement(elemento);
+  newElemento.className = className;
+  newElemento.innerText = texto;
+  return newElemento;
 }
 
+function createCartItemElement({ sku, name, salePrice, image }) {
+  const li = document.createElement('li');
+  li.className = 'cart__item__flex';
+  const id = criaElemento('div', '', sku);
+  id.style.display = 'none';
+  const img = createProductImageElement(image);
+  img.className = 'cart__item__img';
+  const descContainer = criaElemento('div', 'cart__item__description__container');
+  const prodName = criaElemento('span', '', name);
+  const prodPrice = criaElemento('span', 'cart__item__price', toReal(salePrice));
+  const close = criaElemento('a', 'cart__item__close', '');
+  li.appendChild(id);
+  li.appendChild(img);
+  descContainer.appendChild(prodName);
+  descContainer.appendChild(prodPrice);
+  li.appendChild(descContainer);
+  li.appendChild(close);
+  close.addEventListener('click', cartItemClickListener);
+  //<i class="fa-solid fa-xmark"></i>
+
+  return li;
+}
+// li.innerHTML`<img src="${image}" class="cart__item__img">
+// <div class="cart__item__description__container">
+//   <span>${name}</span>
+//   <span class="cart__item__price">${}</span>
+// </div>
+// <a class="cart__item__close">X</a>`;
+
 async function adicionaProdutoCarrinho(event) {
-  const { id: sku, title: name, price: salePrice } = await fetchItem(
+  const { id: sku, title: name, price: salePrice, thumbnail: image } = await fetchItem(
     getSkuFromProductItem(event.target.parentElement),
     );
-    cart.push({ sku, name, salePrice });
+    cart.push({ sku, name, salePrice, image });
     saveCartItems(JSON.stringify(cart));
     totalPrice.innerHTML= toReal(totalCart());
-    cartItems.appendChild(createCartItemElement({ sku, name, salePrice }));
+    cartItems.appendChild(createCartItemElement({ sku, name, salePrice, image }));
 }
 
 function createProductItemElement({ sku, name, image, price }) {
